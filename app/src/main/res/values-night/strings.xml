@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="search">Поиск</string>
+    <string name="history">История</string>
+    <string name="scheme_network">SCHEME / NETWORK</string>
+    <string name="brand">BRAND</string>
+    <string name="length">LENGTH</string>
+    <string name="luhn">LUHN</string>
+    <string name="prepaid">PREPAID</string>
+    <string name="latitude">LATITUDE</string>
+    <string name="longitude">LONGITUDE</string>
+    <string name="bank_address">BANK ADDRESS</string>
+    <string name="web_site">WEB-SITE</string>
+    <string name="type">TYPE</string>
+    <string name="country">Country</string>
+    <string name="bank_number">BANK NUMBER</string>
+    <string name="empty">-</string>
+    <string name="two_empty">-,-</string>
+    <string name="clear">CLEAR</string>
+    <string name="refresh">REFRESH</string>
+    <string name="no_internet_connection">Problems with internet connection</string>
+</resources>
