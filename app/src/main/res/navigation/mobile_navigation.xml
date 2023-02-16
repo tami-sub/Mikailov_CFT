@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/historyFragment"
-        android:name="com.example.cft.ui.main.HistoryFragment"
+        android:name="com.example.cft.ui.main.history.HistoryFragment"
         android:label="fragment_history"
         tools:layout="@layout/fragment_history" />
 </navigation>

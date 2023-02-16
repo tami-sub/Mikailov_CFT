@@ -5,7 +5,6 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,8 +12,6 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.SearchView
 import android.widget.SearchView.OnQueryTextListener
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import com.example.cft.R
 import com.example.cft.databinding.FragmentSearchBinding
@@ -151,7 +148,7 @@ class SearchFragment : Fragment() {
 
     private fun getSearchInfo(bin: String) {
         if (bin.isNotEmpty()) {
-            viewModel.getCardInfoMovies(bin)
+            viewModel.getCardInfoMovies(bin, cardDigits)
         } else {
             clearCardFields()
         }
