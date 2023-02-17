@@ -1,17 +1,17 @@
 package com.example.cft.ui.main.history
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cft.databinding.ItemCardInfoBinding
 import com.example.cft.domain.entity.Card
+import com.example.utils.Utils.getYesOrNo
+import com.example.utils.Utils.separateCardNumber
 
 class HistoryAdapter() : RecyclerView.Adapter<HistoryAdapter.CardViewHolder>() {
 
-    private val emptyField = "-"
+    private lateinit var emptyField: String
     private var cardsList = mutableListOf<Card>()
 
     inner class CardViewHolder(private val binding: ItemCardInfoBinding) :
@@ -20,7 +20,7 @@ class HistoryAdapter() : RecyclerView.Adapter<HistoryAdapter.CardViewHolder>() {
         fun bind(card: Card) {
             binding.also { x ->
                 x.binDigits
-                x.binDigits.setText(card.cardNumber)
+                x.binDigits.setText(separateCardNumber(card.cardNumber))
                 x.scheme.setText(card.scheme ?: emptyField)
                 x.brand.setText(card.brand ?: emptyField)
                 x.length.setText(card.number?.length ?: emptyField)
@@ -56,14 +56,11 @@ class HistoryAdapter() : RecyclerView.Adapter<HistoryAdapter.CardViewHolder>() {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setItems(cards: List<Card>) {
+    fun setItems(cards: List<Card>, emptyField: String) {
+        this.emptyField = emptyField
         cardsList = cards.toMutableList()
         notifyDataSetChanged()
     }
-
-    private fun getYesOrNo(it: Boolean?) = if (it != null) {
-        if (it) "YES" else "NO"
-    } else emptyField
 
     override fun getItemCount(): Int = cardsList.size
 }

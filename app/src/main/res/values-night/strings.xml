@@ -20,4 +20,5 @@
     <string name="refresh">REFRESH</string>
     <string name="no_internet_connection">Problems with internet connection</string>
     <string name="clear_search_history">CLEAR SEARCH HISTORY</string>
+    <string name="u">23</string>
 </resources>

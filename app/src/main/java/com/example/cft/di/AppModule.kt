@@ -14,6 +14,8 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import com.example.utils.ResultCallAdapterFactory
+import com.example.utils.Utils.BASE_URL
+import com.example.utils.Utils.DATABASE_NAME
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Singleton
 
@@ -25,37 +27,28 @@ object AppModule {
     @Singleton
     @Provides
     fun provideRetrofit(): BinApi {
-        val gson = GsonBuilder()
-            .setLenient()
-            .create()
-        val retrofit =  Retrofit.Builder()
-            .baseUrl("https://lookup.binlist.net/")
+        val gson = GsonBuilder().setLenient().create()
+        val retrofit = Retrofit.Builder().baseUrl(BASE_URL)
             .addCallAdapterFactory(ResultCallAdapterFactory())
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .client(loggingHttp())
-            .build()
+            .addConverterFactory(GsonConverterFactory.create(gson)).client(loggingHttp()).build()
         return retrofit.create(BinApi::class.java)
     }
 
     @Singleton
     @Provides
     fun loggingHttp(): OkHttpClient {
-        return OkHttpClient.Builder()
-            .build()
+        return OkHttpClient.Builder().build()
     }
 
     @Module
     @InstallIn(SingletonComponent::class)
     object DbModule {
-        //Hilt needs to know how to create an instance of NoteDatabase. For that add another method below provideDao.
         @Provides
         @Singleton
         fun provide(@ApplicationContext context: Context) = Room.databaseBuilder(
-            context, AppDataBase::class.java, "card_database")
-            .allowMainThreadQueries()
-            .fallbackToDestructiveMigration()
-            .build()
-        //This annotation marks the method provideDao as a provider of noteDoa.
+            context, AppDataBase::class.java, DATABASE_NAME
+        ).allowMainThreadQueries().fallbackToDestructiveMigration().build()
+
         @Provides
         @Singleton
         fun provideDao(db: AppDataBase) = db.cardDao()
@@ -63,12 +56,4 @@ object AppModule {
         @Provides
         fun provideEntity() = Card()
     }
-
-//    @Module
-//    class RepositoryModule {
-//        @Provides
-//        fun providesBinRepository(binRepository: BinRepository): IBinRepository {
-//            return binRepository
-//        }
-//    }
 }

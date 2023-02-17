@@ -2,19 +2,24 @@ package com.example.cft.ui.main
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.SearchView
 import android.widget.SearchView.OnQueryTextListener
+import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.cft.R
 import com.example.cft.databinding.FragmentSearchBinding
+import com.example.utils.Utils.getYesOrNo
+import com.example.utils.Utils.separateCardNumber
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -27,8 +32,6 @@ class SearchFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         cardDigits = savedInstanceState?.getString("binDigits") ?: ""
-//        val supportActionBar = (activity as AppCompatActivity).supportActionBar!!
-//        supportActionBar.title = getString(R.string.search)
     }
 
     override fun onCreateView(
@@ -47,6 +50,31 @@ class SearchFragment : Fragment() {
                 cardInfo.root.visibility = View.GONE
                 getSearchInfo(cardDigits)
             }
+            cardInfo.latitude.setOnClickListener {
+                openMap()
+            }
+            cardInfo.longitude.setOnClickListener {
+                openMap()
+            }
+            cardInfo.site.setOnClickListener {
+                if (cardInfo.site.text.toString() != emptyField) {
+                    val intent = Intent(Intent.ACTION_VIEW)
+                    intent.data = Uri.parse("https://${cardInfo.site.text}")
+                    if (intent.resolveActivity(requireActivity().packageManager) != null) {
+                        startActivity(intent)
+                    }
+                }
+            }
+            cardInfo.phone.setOnClickListener {
+                if (cardInfo.phone.text.toString() != emptyField) {
+                    val intent = Intent(Intent.ACTION_DIAL)
+                    intent.data = Uri.parse("tel:${cardInfo.phone.text}")
+                    if (intent.resolveActivity(requireActivity().packageManager) != null) {
+                        startActivity(intent)
+                    }
+                }
+            }
+
             searchView.setOnQueryTextListener(object : OnQueryTextListener {
                 override fun onQueryTextSubmit(p0: String?): Boolean {
                     cardDigits = p0.toString().filter { !it.isWhitespace() }
@@ -70,7 +98,7 @@ class SearchFragment : Fragment() {
             }
             viewModel.cardInfoLiveData.observe(viewLifecycleOwner) {
                 with(binding.cardInfo) {
-                    binDigits.setText(cardDigits.chunked(4).joinToString(" "))
+                    binDigits.setText(separateCardNumber(cardDigits))
                     scheme.setText(it?.scheme ?: emptyField)
                     brand.setText(it?.brand ?: emptyField)
                     length.setText(it?.number?.length ?: emptyField)
@@ -110,6 +138,18 @@ class SearchFragment : Fragment() {
         showMainContent()
     }
 
+    private fun openMap() {
+        val latitude = binding.cardInfo.latitude.text
+        val longitude = binding.cardInfo.longitude.text
+        val zoomLevel = 15
+        val uri = "geo:$latitude,$longitude?z=$zoomLevel"
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+        intent.setPackage("com.google.android.apps.maps")
+        if (intent.resolveActivity(requireActivity().packageManager) != null) {
+            startActivity(intent)
+        }
+    }
+
     private fun clearCardFields() {
         with(binding.cardInfo) {
             binDigits.setText("")
@@ -141,10 +181,6 @@ class SearchFragment : Fragment() {
             }
         }
     }
-
-    private fun getYesOrNo(it: Boolean?) = if (it != null) {
-        if (it) "YES" else "NO"
-    } else emptyField
 
     private fun getSearchInfo(bin: String) {
         if (bin.isNotEmpty()) {

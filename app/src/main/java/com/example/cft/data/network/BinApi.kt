@@ -7,6 +7,6 @@ import retrofit2.http.Path
 interface BinApi {
     @GET("{number}")
     suspend fun getCardInfo(
-        @Path("number") number: String
+        @Path("number") number: String,
     ): Result<Card>
 }

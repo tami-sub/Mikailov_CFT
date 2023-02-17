@@ -33,8 +33,8 @@ class ResultCall<T>(val delegate: Call<T>) : Call<Result<T>> {
 
             override fun onFailure(call: Call<T>, t: Throwable) {
                 val errorMessage = when (t) {
-                    is IOException -> t.toString() // Literally for getting in touch with connection problems
-                    is HttpException -> "Something went wrong!"
+                    is IOException -> t.toString()
+                    is HttpException -> t.toString()
                     else -> t.localizedMessage
                 }
                 callback.onResponse(
