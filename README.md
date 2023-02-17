@@ -2,6 +2,7 @@
 CFT test task
 
 Ссылка на APK: https://disk.yandex.com/d/yQGIc44I08k-tw
+
 Используемые библиотеки и причины выбора в их пользу:
 
 Retrofit 2 обеспечивает:
